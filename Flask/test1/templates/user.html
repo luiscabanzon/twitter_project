@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %} Hello {{user_data["name"]}} {% endblock %}
+
+{% block page_content %}
+<div class = "container">
+	<div class = "page-header">
+		<h1>Hello, @{{ user_data["name"] }}!</h1>
+	</div>
+</div>
+<div class="col-md-6">
+	<h1>You have <em>{{user_data["n_followers"]}}</em> followers:</h1>
+	<ol>
+		{% for i in user_data["followers"] %}
+		<li>@{{ i.screen_name }}</li>
+		{% endfor %}
+	</ol>
+</div>
+<div class="col-md-6">
+	<h1>You are following <em>{{user_data["n_following"]}}</em> users:</h1>
+	<ol>
+		{% for j in user_data["following"] %}
+		<li>@{{ j.screen_name }}</li>
+		{% endfor %}
+	</ol>
+</div>
+{% endblock %}
+
