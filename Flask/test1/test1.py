@@ -1,3 +1,4 @@
+import flask
 from flask import Flask, render_template
 app = Flask(__name__)
 
@@ -10,6 +11,7 @@ bootstrap = Bootstrap(app)
 #############
 import tweepy
 import time
+import json
 
 consumer_key ='pX1VF2Mp5FicThnpyWmP7GyH3'
 consumer_secret = 'zuesUN6OPburvzMssJivbGNwgjfSj3vNCaJ4hbH9WrZlbwhweM'
@@ -28,6 +30,25 @@ api = tweepy.API(auth)
 # @app.route('/index')
 # def index():
 # 	return render_template('index.html')
+
+@app.route('/word_cloud_test_json')
+def wordcloud_json():
+	import pickle
+	with open("/home/honu/projects/twitter/fallout4_output.txt", 'rb') as f:
+		output = pickle.load(f)
+	return flask.jsonify(output)
+	#return flask.jsonify(**output_json)
+	#return render_template('hashtag.html', data = output_json)
+
+@app.route('/word_cloud_test_html')
+def wordcloud_html():
+	import pickle
+	with open("/home/honu/projects/twitter/fallout4_json.txt", 'rb') as f:
+		output_json = pickle.load(f)
+	with open("/home/honu/projects/twitter/fallout4_output.txt", 'rb') as f:
+		out = pickle.load(f)
+	output = flask.jsonify(out)
+	return render_template('words_cloud_test.html', output_json = output_json, output = output)
 
 @app.route('/user/<name>')
 def  user(name):
