@@ -22,10 +22,35 @@
     <script type="text/javascript" src="https://raw.githubusercontent.com/jasondavies/d3-cloud/master/d3.layout.cloud.js" charset="utf-8"></script>
     <script type="text/javascript">
 
-    var output = JSON.parse({{output_json|tojson}});
-    var text = output.text.split(" ")
 
-     var fill = d3.scale.category20();
+    /*var output
+    jQuery.get("fallout4_json.txt").then(function(text, status, xhr){
+   		alert(text)
+	});*/
+
+
+	function readTextFile(file){
+	    var rawFile = new XMLHttpRequest();
+	    rawFile.open("GET", file, false);
+	    rawFile.onreadystatechange = function ()
+	    {
+	        if(rawFile.readyState === 4)
+	        {
+	            if(rawFile.status === 200 || rawFile.status == 0)
+	            {
+	                var allText = rawFile.responseText;
+	                alert(allText);
+	            }
+	        }
+    	}
+    rawFile.send(null);
+	}
+
+	var output = readTextFile("fallout4_json.txt");
+	alert(output);
+    var text = output["text"].split(" ");
+
+    var fill = d3.scale.category20();
 	  d3.layout.cloud().size([300, 300])
 	      .words(text.map(function(d) {
 	        return {text: d, size: 10 + Math.random() * 90};

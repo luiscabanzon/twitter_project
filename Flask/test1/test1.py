@@ -31,7 +31,13 @@ api = tweepy.API(auth)
 # def index():
 # 	return render_template('index.html')
 
-@app.route('/word_cloud_test_json')
+@app.route("/api/<date>/<hashtag>")
+def return_json(date, hashtag):
+	with open("/home/honu/projects/twitter/data/" + date + "/" + hashtag + ".txt", 'rb') as f:
+		output = pickle.load(f)
+	return flask.jsonify(output)
+
+@app.route('/words_cloud_test_json')
 def wordcloud_json():
 	import pickle
 	with open("/home/honu/projects/twitter/fallout4_output.txt", 'rb') as f:
@@ -40,7 +46,7 @@ def wordcloud_json():
 	#return flask.jsonify(**output_json)
 	#return render_template('hashtag.html', data = output_json)
 
-@app.route('/word_cloud_test_html')
+@app.route('/words_cloud_test_html')
 def wordcloud_html():
 	import pickle
 	with open("/home/honu/projects/twitter/fallout4_json.txt", 'rb') as f:

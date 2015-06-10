@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="">
+        <title>Words Cloud (Test)</title>
+    </head>
+
+
+    <body>
+
+    	<p>{{output.keys}}</p>
+    	<div id="chart"></div>
+
+    	<!--<h1>JSON</h1><hr><%= truncate(@data, :length => 2000) %>-->
+
+
+
+
+
+
+
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+
+
+	/*function readTextFile(file){
+	    var rawFile = new XMLHttpRequest();
+	    rawFile.open("GET", file, false);
+	    rawFile.onreadystatechange = function ()
+	    {
+	        if(rawFile.readyState === 4)
+	        {
+	            if(rawFile.status === 200 || rawFile.status == 0)
+	            {
+	                var allText = rawFile.responseText;
+	                alert(allText);
+	            }
+	        }
+    	}
+    rawFile.send(null);
+	}*/
+
+	var output = JSON.parse(<%= @data.to_json.html_safe %>);
+	//alert(output);
+    var text = output.text.split(" ");
+
+    /*
+    var fill = d3.scale.category20();
+	  d3.layout.cloud().size([300, 300])
+	      .words(text.map(function(d) {
+	        return {text: d, size: 10 + Math.random() * 90};
+	      }))
+	      .padding(5)
+	      .rotate(function() { return ~~(Math.random() * 2) * 90; })
+	      .font("Impact")
+	      .fontSize(function(d) { return d.size; })
+	      .on("end", draw)
+	      .start();
+	  function draw(words) {
+	    d3.select("body").append("svg")
+	        .attr("width", 300)
+	        .attr("height", 300)
+	      .append("g")
+	        .attr("transform", "translate(150,150)")
+	      .selectAll("text")
+	        .data(words)
+	      .enter().append("text")
+	        .style("font-size", function(d) { return d.size + "px"; })
+	        .style("font-family", "Impact")
+	        .style("fill", function(d, i) { return fill(i); })
+	        .attr("text-anchor", "middle")
+	        .attr("transform", function(d) {
+	          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+	        })
+	        .text(function(d) { return d.text; });
+  }*/
+    </script>
+
+
+<!--
+    <script type="text/javascript">
+      (function(d3) {
+        'use strict';
+
+        var width = 360;
+        var height = 360;
+        var radius = Math.min(width, height) / 2;
+        var donutWidth = 75;
+        var legendRectSize = 18;
+        var legendSpacing = 4;
+
+        var color = d3.scale.category20b();
+
+        var svg = d3.select('#chart')
+          .append('svg')
+          .attr('width', width)
+          .attr('height', height)
+          .append('g')
+          .attr('transform', 'translate(' + (width / 2) + 
+            ',' + (height / 2) + ')');
+
+        var arc = d3.svg.arc()
+          .innerRadius(radius - donutWidth)
+          .outerRadius(radius);
+
+        var pie = d3.layout.pie()
+          .value(function(d) { return d.count; })
+          .sort(null);
+
+        var tooltip = d3.select('#chart')                               // NEW
+          .append('div')                                                // NEW
+          .attr('class', 'tooltip');                                    // NEW
+                      
+        tooltip.append('div')                                           // NEW
+          .attr('class', 'label');                                      // NEW
+             
+        tooltip.append('div')                                           // NEW
+          .attr('class', 'count');                                      // NEW
+
+        tooltip.append('div')                                           // NEW
+          .attr('class', 'percent');                                    // NEW
+
+        d3.csv('/home/honu/html/weekdays.csv', function(error, dataset) {
+          dataset.forEach(function(d) {
+            d.count = +d.count;
+          });
+
+          var path = svg.selectAll('path')
+            .data(pie(dataset))
+            .enter()
+            .append('path')
+            .attr('d', arc)
+            .attr('fill', function(d, i) { 
+              return color(d.data.label); 
+            });
+
+          path.on('mouseover', function(d) {                            // NEW
+            var total = d3.sum(dataset.map(function(d) {                // NEW
+              return d.count;                                           // NEW
+            }));                                                        // NEW
+            var percent = Math.round(1000 * d.data.count / total) / 10; // NEW
+            tooltip.select('.label').html(d.data.label);                // NEW
+            tooltip.select('.count').html(d.data.count);                // NEW
+            tooltip.select('.percent').html(percent + '%');             // NEW
+            tooltip.style('display', 'block');                          // NEW
+          });                                                           // NEW
+          
+          path.on('mouseout', function() {                              // NEW
+            tooltip.style('display', 'none');                           // NEW
+          });                                                           // NEW
+
+          /* OPTIONAL 
+          path.on('mousemove', function(d) {                            // NEW
+            tooltip.style('top', (d3.event.pageY + 10) + 'px')          // NEW
+              .style('left', (d3.event.pageX + 10) + 'px');             // NEW
+          });                                                           // NEW
+          */
+            
+          var legend = svg.selectAll('.legend')
+            .data(color.domain())
+            .enter()
+            .append('g')
+            .attr('class', 'legend')
+            .attr('transform', function(d, i) {
+              var height = legendRectSize + legendSpacing;
+              var offset =  height * color.domain().length / 2;
+              var horz = -2 * legendRectSize;
+              var vert = i * height - offset;
+              return 'translate(' + horz + ',' + vert + ')';
+            });
+
+          legend.append('rect')
+            .attr('width', legendRectSize)
+            .attr('height', legendRectSize)                                   
+            .style('fill', color)
+            .style('stroke', color);
+            
+          legend.append('text')
+            .attr('x', legendRectSize + legendSpacing)
+            .attr('y', legendRectSize - legendSpacing)
+            .text(function(d) { return d; });
+
+        });
+
+      })(window.d3);
+    </script>
+-->
+    <script type="text/javascript">
+
+		$('body').append("<div class=\"box\" id=\"box_lang\"></div>")
+		$('body').append("<div class=\"box\" id=\"box_time_zones\"></div>")
+		$('body').append("<div class=\"box\" id=\"box_hashtags\"></div>")
+		$('body').append("<div class=\"box\" id=\"box_most_rt\"></div>")
+		$('body').append("<div class=\"box\" id=\"box_most_fav\"></div>")
+		console.log(output.lang);
+		box_lang = $('#box_lang')
+		box_lang.append("<h3>BOX_LANG</h3><hr>")
+		for(i = 0; i < 5; i++){
+			box_lang.append("<p><b>" + output["lang"][i][0] + ": </b>" + parseFloat((parseInt(output["lang"][i][1]) / output["len"] * 100).toFixed(2)) + "%</p>");
+		}
+
+		box_hashtags = $('#box_hashtags');
+		box_hashtags.append("<h3>BOX_HASHTAGS</h3><hr>");
+		for (i = 0; i < output["hashtags"].length; i++){
+			box_hashtags.append("<p><b>" + output["hashtags"][i][0] + ": </b>" + parseFloat((parseInt(output["hashtags"][i][1]) / output["len"] * 100).toFixed(2)) + "%</p>");
+		}
+
+		most_rt = $('#box_most_rt');
+		most_rt.append("<h3>BOX_MOST_RT</h3><hr>");
+		most_rt.append("<p><b><a href = http://twitter.com/" + output["most_rt"]["user"] + ">@" + output["most_rt"]["user"] + "</a></b></p>")
+		most_rt.append("<img src=" + output["most_rt"]["user_pic"] + ">")
+		most_rt.append("<p>" + output["most_rt"]["text"] + "</p>")
+
+
+
+		console.log("IT WORKS!")
+
+    </script>
+    </body>
+</html>
