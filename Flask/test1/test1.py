@@ -12,6 +12,7 @@ bootstrap = Bootstrap(app)
 import tweepy
 import time
 import json
+import pickle
 
 consumer_key ='pX1VF2Mp5FicThnpyWmP7GyH3'
 consumer_secret = 'zuesUN6OPburvzMssJivbGNwgjfSj3vNCaJ4hbH9WrZlbwhweM'
@@ -39,7 +40,6 @@ def return_json(date, hashtag):
 
 @app.route('/words_cloud_test_json')
 def wordcloud_json():
-	import pickle
 	with open("/home/honu/projects/twitter/fallout4_output.txt", 'rb') as f:
 		output = pickle.load(f)
 	return flask.jsonify(output)
@@ -48,7 +48,6 @@ def wordcloud_json():
 
 @app.route('/words_cloud_test_html')
 def wordcloud_html():
-	import pickle
 	with open("/home/honu/projects/twitter/fallout4_json.txt", 'rb') as f:
 		output_json = pickle.load(f)
 	with open("/home/honu/projects/twitter/fallout4_output.txt", 'rb') as f:
