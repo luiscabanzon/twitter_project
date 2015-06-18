@@ -1,0 +1,22 @@
+(lp0
+S'Lebron'
+p1
+aS'#3PalabrasAntesDelSexo'
+p2
+aS'S\xc3\xbcleyman Demirel'
+p3
+aS'#FixtureReleaseDay'
+p4
+aS'Vidal'
+p5
+aS'#Bac2015'
+p6
+aS'Boxing Day'
+p7
+aS'#\xd8\xb4\xd8\xae\xd8\xb5_\xd9\x85\xd8\xb4\xd9\x87\xd9\x88\xd8\xb1_\xd9\x82\xd8\xa7\xd8\xa8\xd9\x84\xd8\xaa\xd9\x87_\xd8\xb5\xd8\xaf\xd9\x81\xd9\x87'
+p8
+aS'#maturita2015'
+p9
+aS'Senegal'
+p10
+a.

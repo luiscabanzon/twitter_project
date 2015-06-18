@@ -44,7 +44,7 @@ def load_data(date, trending_topic):
 	return data
 
 ##########################
-# Analysis Main Function #
+# Analysis Main Function ##3PalabrasAntesDelSexo
 ##########################
 def download_tweets(trending_topic):
 	last_month = str(datetime.today() - timedelta(days=30))[:10]
@@ -52,12 +52,12 @@ def download_tweets(trending_topic):
 	tomorrow = str(datetime.today() + timedelta(days=1))[:10]
 	trend = tweepy.Cursor(api.search, q=trending_topic, since=last_month, until=tomorrow).items()
 	data = []
-	counter = 0
-	for i in trend:
-		counter = counter + 1
+	while True:
 		try:
-			data.append(i)
-		except tweepy.TweepError:
+			data.append(trend.next())
+		except tweepy.error.TweepError:
+			break
+		except StopIteration:
 			break
 
 	with open(_pwd_ + "db/raw_data/" + today + "_" + trending_topic + ".txt", 'wb') as f:
@@ -145,7 +145,10 @@ def complete_process(trending_topic):
 
 #################
 
-#with open("/home/honu/projects/twitter/fallout4.txt", 'rb') as f:
-#	test = pickle.load(f)
-
-analysis(download_tweets("#ThreeWordsSheWantsToHear"), trending_topic = "#ThreeWordsSheWantsToHear")
+#with open("/home/honu/projects/twitter/Flask/db/raw_data/" + "2015-06-17_" + "#3PalabrasAntesDelSexo.txt", 'rb') as f:
+#	data = pickle.load(f)
+print datetime.now()
+analysis(download_tweets("#MTVBattleFifthHarmony"), trending_topic = "#MTVBattleFifthHarmony")
+#get_trending_topics()
+print datetime.now()
+#analysis(data,"#ThreeWordsSheWantsToHear")
