@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-
+  root 'dashboards#index'
   get 'test' => 'dashboards#test'
+  get 'test_json' => 'dashboards#test_json'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

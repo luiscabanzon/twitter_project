@@ -17,7 +17,7 @@ auth.set_access_token(access_token, access_token_secret)
 
 api = tweepy.API(auth)
 
-_pwd_ = "/home/honu/projects/twitter/Flask/"
+_pwd_ = "/home/honu/projects/tweetpeek/"
 
 ##################################
 #    Save and load functions     #
@@ -95,7 +95,7 @@ def analysis(data, trending_topic):
 	time_zones = collections.Counter(df["time_zone"]).most_common(25)
 
 	output["len"] = str(len(df))
-	output["lang"] = [[df["lang"].value_counts().head().index[i], str(df["lang"].value_counts().head().values[i])] for i in xrange(5)]
+	output["lang"] = [[df["lang"].value_counts().index[i], str(df["lang"].value_counts().values[i])] for i in xrange(len(df["lang"].unique()))]
 	output["time_zones"] = [[entry[0], str(entry[1])] for entry in time_zones]
 	output["hashtags"] = [[top_hashtags[i][0], str(top_hashtags[i][1])] for i in xrange(10)]
 	output["users"] = [[top_users[i][0], str(top_users[i][1])] for i in xrange(10)]
@@ -145,10 +145,18 @@ def complete_process(trending_topic):
 
 #################
 
-#with open("/home/honu/projects/twitter/Flask/db/raw_data/" + "2015-06-17_" + "#3PalabrasAntesDelSexo.txt", 'rb') as f:
+#with open("/home/honu/projects/tweetpeek/db/raw_data/" + "2015-06-19_" + "#nationalkissingday.txt", 'rb') as f:
 #	data = pickle.load(f)
-print datetime.now()
-analysis(download_tweets("#MTVBattleFifthHarmony"), trending_topic = "#MTVBattleFifthHarmony")
+#analysis(download_tweets("#MTVBattleFifthHarmony"), trending_topic = "#MTVBattleFifthHarmony")
+#analysis(data,"#nationalkissingday")
+
+with open("/home/honu/projects/tweetpeek/db/trends/2015-06-19_trends.txt", 'rb') as f:
+    trends_list = pickle.load(f)
+    
+for trend_i in trends_list[2:]:
+	print str(datetime.now()) + " : START " + trend_i
+	analysis(download_tweets(trend_i), trending_topic = trend_i)
+	print str(datetime.now()) + " : FINISH " + trend_i
+	time.sleep(60 * 15)
 #get_trending_topics()
-print datetime.now()
-#analysis(data,"#ThreeWordsSheWantsToHear")
+

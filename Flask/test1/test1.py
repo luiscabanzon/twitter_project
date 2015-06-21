@@ -34,13 +34,13 @@ api = tweepy.API(auth)
 
 @app.route("/api/<date>/<hashtag>")
 def return_json(date, hashtag):
-	with open("/home/honu/projects/twitter/data/" + date + "/" + hashtag + ".txt", 'rb') as f:
+	with open("/home/honu/projects/tweetpeek/db/json/" + date + "_" + hashtag + ".txt", 'rb') as f:
 		output = pickle.load(f)
 	return flask.jsonify(output)
 
 @app.route('/words_cloud_test_json')
 def wordcloud_json():
-	with open("/home/honu/projects/twitter/fallout4_output.txt", 'rb') as f:
+	with open("/home/honu/projects/tweetpeek/app/testing/fallout4_output.txt", 'rb') as f:
 		output = pickle.load(f)
 	return flask.jsonify(output)
 	#return flask.jsonify(**output_json)
@@ -48,9 +48,9 @@ def wordcloud_json():
 
 @app.route('/words_cloud_test_html')
 def wordcloud_html():
-	with open("/home/honu/projects/twitter/fallout4_json.txt", 'rb') as f:
+	with open("/home/honu/projects/tweetpeek/app/testing/fallout4_json.txt", 'rb') as f:
 		output_json = pickle.load(f)
-	with open("/home/honu/projects/twitter/fallout4_output.txt", 'rb') as f:
+	with open("/home/honu/projects/tweetpeek/app/testing/fallout4_output.txt", 'rb') as f:
 		out = pickle.load(f)
 	output = flask.jsonify(out)
 	return render_template('words_cloud_test.html', output_json = output_json, output = output)
