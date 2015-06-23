@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 import tweepy
 import time
 import pandas as pd
@@ -91,7 +93,7 @@ def analysis(data, trending_topic):
 	top_hashtags = hashtags_frequency.most_common(10)
 	top_users = mentions_frequency.most_common(10)
 	most_fav = df[df["favs"] == df["favs"].max()].head(1)
-	most_rt = data[df[df["rt"] == df["rt"].max()].head(1).index[0]].retweeted_status
+	most_rt = data[df[df["rt"] == df["rt"].max()].head(1).index[0]]
 	time_zones = collections.Counter(df["time_zone"]).most_common(25)
 
 	output["len"] = str(len(df))
@@ -101,6 +103,13 @@ def analysis(data, trending_topic):
 	output["users"] = [[top_users[i][0], str(top_users[i][1])] for i in xrange(10)]
 	output["most_fav"] = {"user": str(most_fav["user"][most_fav.index[0]]), "user_pic": str(most_fav["user_pic"][most_fav.index[0]]), "text": str(most_fav["text"][most_fav.index[0]]), "favs": str(most_fav["favs"][most_fav.index[0]]), "rt": str(most_fav["rt"][most_fav.index[0]]), "created_at": str(most_fav["created_at"][most_fav.index[0]])}
 	output["most_rt"] = {"user": str(most_rt.user.screen_name.encode("utf-8")), "user_id": str(most_rt.user.id),"user_pic": str(most_rt.user.profile_image_url.encode("utf-8")), "text": most_rt.text.encode("utf-8"), "tweet_id": str(most_rt.id), "favs": str(most_rt.favorite_count), "rt": str(most_rt.retweet_count), "created_at": str(most_rt.created_at)}
+	
+	if most_rt._json["retweeted"]:
+		most_rt = most_rt.retweeted_status
+		output["most_rt"] = {"user": str(most_rt.user.screen_name.encode("utf-8")), "user_id": str(most_rt.user.id),"user_pic": str(most_rt.user.profile_image_url.encode("utf-8")), "text": most_rt.text.encode("utf-8"), "tweet_id": str(most_rt.id), "favs": str(most_rt.favorite_count), "rt": str(most_rt.retweet_count), "created_at": str(most_rt.created_at)}
+	else:
+		output["most_rt"] = {"user": str(most_rt.user.screen_name.encode("utf-8")), "user_id": str(most_rt.user.id),"user_pic": str(most_rt.user.profile_image_url.encode("utf-8")), "text": most_rt.text.encode("utf-8"), "tweet_id": str(most_rt.id), "favs": str(most_rt.favorite_count), "rt": str(most_rt.retweet_count), "created_at": str(most_rt.created_at)}
+
 	output["text"] = data_text
 
 	json_output = json.dumps(output)
@@ -145,18 +154,21 @@ def complete_process(trending_topic):
 
 #################
 
-#with open("/home/honu/projects/tweetpeek/db/raw_data/" + "2015-06-19_" + "#nationalkissingday.txt", 'rb') as f:
+#with open("/home/honu/projects/tweetpeek/db/raw_data/" + "2015-06-19_" + "#شي_تعرفه_عن_الاردنيين" + ".txt", 'rb') as f:
 #	data = pickle.load(f)
 #analysis(download_tweets("#MTVBattleFifthHarmony"), trending_topic = "#MTVBattleFifthHarmony")
-#analysis(data,"#nationalkissingday")
-
-with open("/home/honu/projects/tweetpeek/db/trends/2015-06-19_trends.txt", 'rb') as f:
+#analysis(data,"#شي_تعرفه_عن_الاردنيين")
+get_trending_topics()
+with open("/home/honu/projects/tweetpeek/db/trends/2015-06-23_trends.txt", 'rb') as f:
     trends_list = pickle.load(f)
+
+for trend_i in trends_list:
+	print trend_i
     
-for trend_i in trends_list[2:]:
+for trend_i in trends_list:
 	print str(datetime.now()) + " : START " + trend_i
 	analysis(download_tweets(trend_i), trending_topic = trend_i)
 	print str(datetime.now()) + " : FINISH " + trend_i
 	time.sleep(60 * 15)
-#get_trending_topics()
+
 
