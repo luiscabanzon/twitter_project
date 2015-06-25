@@ -101,7 +101,7 @@ def analysis(data, trending_topic):
 	output["time_zones"] = [[entry[0], str(entry[1])] for entry in time_zones]
 	output["hashtags"] = [[top_hashtags[i][0], str(top_hashtags[i][1])] for i in xrange(10)]
 	output["users"] = [[top_users[i][0], str(top_users[i][1])] for i in xrange(10)]
-	output["most_fav"] = {"user": str(most_fav["user"][most_fav.index[0]]), "user_pic": str(most_fav["user_pic"][most_fav.index[0]]), "text": str(most_fav["text"][most_fav.index[0]]), "favs": str(most_fav["favs"][most_fav.index[0]]), "rt": str(most_fav["rt"][most_fav.index[0]]), "created_at": str(most_fav["created_at"][most_fav.index[0]])}
+	output["most_fav"] = {"user": str(most_fav["user"][most_fav.index[0]]), "user_pic": str(most_fav["user_pic"][most_fav.index[0]]), "text": str(most_fav["text"][most_fav.index[0]]), "favs": str(int(most_fav["favs"][most_fav.index[0]])), "rt": str(int(most_fav["rt"][most_fav.index[0]])), "created_at": str(most_fav["created_at"][most_fav.index[0]])}
 	output["most_rt"] = {"user": str(most_rt.user.screen_name.encode("utf-8")), "user_id": str(most_rt.user.id),"user_pic": str(most_rt.user.profile_image_url.encode("utf-8")), "text": most_rt.text.encode("utf-8"), "tweet_id": str(most_rt.id), "favs": str(most_rt.favorite_count), "rt": str(most_rt.retweet_count), "created_at": str(most_rt.created_at)}
 	
 	if most_rt._json["retweeted"]:
@@ -110,7 +110,10 @@ def analysis(data, trending_topic):
 	else:
 		output["most_rt"] = {"user": str(most_rt.user.screen_name.encode("utf-8")), "user_id": str(most_rt.user.id),"user_pic": str(most_rt.user.profile_image_url.encode("utf-8")), "text": most_rt.text.encode("utf-8"), "tweet_id": str(most_rt.id), "favs": str(most_rt.favorite_count), "rt": str(most_rt.retweet_count), "created_at": str(most_rt.created_at)}
 
-	output["text"] = data_text
+	output["words_cloud"] = []
+	words_cloud = collections.Counter(data_text.split(" ")).most_common(100)
+	for word in words_cloud:
+		output["words_cloud"].append(word[0])
 
 	json_output = json.dumps(output)
 
@@ -159,7 +162,7 @@ def complete_process(trending_topic):
 #analysis(download_tweets("#MTVBattleFifthHarmony"), trending_topic = "#MTVBattleFifthHarmony")
 #analysis(data,"#شي_تعرفه_عن_الاردنيين")
 get_trending_topics()
-with open("/home/honu/projects/tweetpeek/db/trends/2015-06-23_trends.txt", 'rb') as f:
+with open("/home/honu/projects/tweetpeek/db/trends/2015-06-25_trends.txt", 'rb') as f:
     trends_list = pickle.load(f)
 
 for trend_i in trends_list:

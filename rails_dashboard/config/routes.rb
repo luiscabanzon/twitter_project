@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   root 'dashboards#index'
+  get 'api/:date/:trend' => 'dashboards#api'
   get 'test' => 'dashboards#test'
   get 'test_json' => 'dashboards#test_json'
+  get 'test2' => 'dashboards#test2'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
