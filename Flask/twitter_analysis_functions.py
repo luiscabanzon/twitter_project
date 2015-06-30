@@ -31,12 +31,12 @@ def get_trending_topics():
 	for i in trends[0]["trends"]:
 		trend =  str(i["name"].encode("utf-8"))
 		trends_list.append(trend)
-	with open(_pwd_ + "db/trends/" + today + "_trends.txt", 'wb') as f:
-		pickle.dump(trends_list, f)
+	with open(_pwd_ + "db/trends/" + today + "_trends.json", 'wb') as f:
+		json.dump(trends_list, f)
 
 def load_trending_topics(date):
-	with open(_pwd_ + "db/trends/" + date + "_trends.txt", 'rb') as f:
-		trends = pickle.load(f)
+	with open(_pwd_ + "db/trends/" + date + "_trends.json", 'rb') as f:
+		trends = json.load(f)
 	return trends
 
 
@@ -67,8 +67,9 @@ def download_tweets(trending_topic):
 
 	return data
 
-def analysis(data, trending_topic):
-	today = str(datetime.today())[:10]
+def analysis(data, trending_topic, today = None):
+	if today == None:
+		today = str(datetime.today())[:10]
 	data_text = ""
 	for i in data:
 		data_text = ' '.join([data[i].text.lower() for i in xrange(len(data))]).encode('utf-8')
@@ -96,6 +97,8 @@ def analysis(data, trending_topic):
 	most_rt = data[df[df["rt"] == df["rt"].max()].head(1).index[0]]
 	time_zones = collections.Counter(df["time_zone"]).most_common(25)
 
+	output["topic"] = trending_topic
+	output["date"] = today
 	output["len"] = str(len(df))
 	output["lang"] = [[df["lang"].value_counts().index[i], str(df["lang"].value_counts().values[i])] for i in xrange(len(df["lang"].unique()))]
 	output["time_zones"] = [[entry[0], str(entry[1])] for entry in time_zones]
@@ -117,8 +120,8 @@ def analysis(data, trending_topic):
 
 	json_output = json.dumps(output)
 
-	with open(_pwd_ + "db/json/" + today + "_" + trending_topic + "_json.txt", 'wb') as f:
-		pickle.dump(json_output, f)
+	with open(_pwd_ + "db/json/" + today + "_" + trending_topic + ".json", 'wb') as f:
+		json.dump(json_output, f)
 
 	return json_output
 
@@ -161,9 +164,14 @@ def complete_process(trending_topic):
 #	data = pickle.load(f)
 #analysis(download_tweets("#MTVBattleFifthHarmony"), trending_topic = "#MTVBattleFifthHarmony")
 #analysis(data,"#شي_تعرفه_عن_الاردنيين")
+
+###########################
+# DAILY  DATA DOWNLOADING #
+###########################
+
 get_trending_topics()
-with open("/home/honu/projects/tweetpeek/db/trends/2015-06-25_trends.txt", 'rb') as f:
-    trends_list = pickle.load(f)
+with open("/home/honu/projects/tweetpeek/db/trends/2015-06-29_trends.json", 'rb') as f:
+    trends_list = json.load(f)
 
 for trend_i in trends_list:
 	print trend_i
@@ -175,3 +183,17 @@ for trend_i in trends_list:
 	time.sleep(60 * 15)
 
 
+#########################
+# TO UPDATE ALL REPORTS #
+#########################
+'''
+from os import listdir
+files = listdir("/home/honu/projects/tweetpeek/db/raw_data")
+for f in files:
+	print str(datetime.now()) + " : START " + f[:-4]
+	with open("/home/honu/projects/tweetpeek/db/raw_data/" + f, 'rb') as x:
+		data = pickle.load(x)
+	print str(datetime.now()) + " : LOADED " + f[:-4]
+	analysis(data, f[11:-4], today = f[:10])
+	print str(datetime.now()) + " : FINISH " + f[:-4]
+'''

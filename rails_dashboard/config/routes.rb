@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   root 'dashboards#index'
-  get 'api/:date/:trend' => 'dashboards#api'
+  get 'api/:date/:topic' => 'dashboards#api'
+  get 'json/:date/:topic' => 'dashboards#json'
   get 'test' => 'dashboards#test'
   get 'test_json' => 'dashboards#test_json'
   get 'test2' => 'dashboards#test2'

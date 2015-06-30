@@ -13,6 +13,7 @@ import tweepy
 import time
 import json
 import pickle
+from os import listdir
 
 consumer_key ='pX1VF2Mp5FicThnpyWmP7GyH3'
 consumer_secret = 'zuesUN6OPburvzMssJivbGNwgjfSj3vNCaJ4hbH9WrZlbwhweM'
@@ -31,6 +32,43 @@ api = tweepy.API(auth)
 # @app.route('/index')
 # def index():
 # 	return render_template('index.html')
+
+@app.route("/all_dates")
+def all_days():
+	files = listdir("/home/honu/projects/tweetpeek/db/trends")
+	dates = {"dates": []}
+	for f in files:
+		dates["dates"].append(f[:10])
+	return flask.jsonify(dates)
+
+@app.route("/trends/<date>")
+def trends_per_day(date):
+	folder = "/home/honu/projects/tweetpeek/db/trends/"
+	files = listdir(folder)
+	trends = {"trends": [date]}
+	for f in files:
+		if f[:10] == date:
+			with open(folder + date + "_trends.json") as x:
+				data = json.load(x)
+				for i in data:
+					trends["trends"].append(i)
+	return flask.jsonify(trends)
+
+@app.route("/trends/<date>/<path:trend>")
+def trend(date, trend):
+	folder = "/home/honu/projects/tweetpeek/db/json/"
+	files = listdir(folder)
+	output = {}
+	for f in files:
+		file_name = date + "_" + trend
+		if f[:-5] == file_name:
+			with open(folder + file_name + ".json") as x:
+				data = json.load(x)
+				dat = json.loads(data.encode('utf-8'))
+				for d in dat.keys():
+					output[d] = dat[d]
+	return flask.jsonify(output)
+
 
 @app.route("/api/<date_topic>")
 def return_json(date_topic):
@@ -57,7 +95,7 @@ def wordcloud_html():
 
 @app.route('/test2')
 def test2():
-	with open("/home/honu/projects/tweetpeek/db/json/2015-06-02_fallout4_json.txt", 'rb') as f:
+	with open("/home/honu/projects/tweetpeek/db/json/2015-06-26_#Tunisia_json.txt", 'rb') as f:
 		output = pickle.load(f)
 	return output
 

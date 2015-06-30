@@ -6,8 +6,13 @@ class DashboardsController < ApplicationController
 	end
 
 	def api
-		@data = open("http://localhost:5000/api/" + params[:date] + "_" + params[:trend]).read
+		@data = JSON.parse(open("http://localhost:5000/api/" + params[:date] + "_" + params[:topic]).read)
 		render 'index', layout: 'dashboard_layout'
+	end
+
+	def json
+		@data = JSON.parse(open("http://localhost:5000/api/" + params[:date] + "_" + params[:topic]).read)
+		render json: @data
 	end
 
 	def test2
